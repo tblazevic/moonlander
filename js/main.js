@@ -555,7 +555,7 @@ function cameraPositionReset() {
 }
 
 function checkZoom() {
-    if(altitude <= cameraZoomAltitude) {
+    if(altitude <= cameraZoomAltitude || (isZoomed && altitude <= cameraZoomOutAltitude)) {
         zoomIn();
     }
     else if(isZoomed && altitude >= cameraZoomOutAltitude) {
