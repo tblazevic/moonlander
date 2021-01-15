@@ -287,6 +287,7 @@ function checkCollision() {
 function borderCheck() {
     if(lander.position.x < -halfWidth - lineWidth || lander.position.x > halfWidth + lineWidth || lander.position.y < -halfHeight - lineWidth || lander.position.y > halfHeight + lineWidth){
         crashInfo = "OUT OF BOUNDS";
+        hasLanded = false;
         crashed();
     }
 }
