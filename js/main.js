@@ -113,17 +113,17 @@ function createBorders() {
 }
 
 function loadTerrain() {
-    cubeColliders = new THREE.Group();
-    scene.add(cubeColliders);
+    terrainMeshGroup = new THREE.Group();
+    scene.add(terrainMeshGroup);
 
     let i;
     for(i=0; i<points.length-1; i++) {
-        placeCube(points[i], points[i+1]);
+        placeTerrainSegment(points[i], points[i+1]);
         heightDifferences.push(Math.abs(points[i][1]-points[i+1][1]));
     }
 }
 
-function placeCube(leftPoint, rightPoint) {
+function placeTerrainSegment(leftPoint, rightPoint) {
     let leftVector = new THREE.Vector2(leftPoint[0] - halfWidth, leftPoint[1] - halfHeight);
     let rightVector = new THREE.Vector2(rightPoint[0] - halfWidth, rightPoint[1] - halfHeight);
 
@@ -134,16 +134,16 @@ function placeCube(leftPoint, rightPoint) {
 
     const geometry = new THREE.PlaneGeometry(distance*2 + lineWidth/2, lineWidth);
     const material = new THREE.MeshBasicMaterial({color: 0xffffff});
-    let cube = new THREE.Mesh(geometry, material);
-    cube.position.x = center.x;
-    cube.position.y = center.y;
+    let terrainMesh = new THREE.Mesh(geometry, material);
+    terrainMesh.position.x = center.x;
+    terrainMesh.position.y = center.y;
 
     let direction = rightVector.sub(leftVector);
     let angle = direction.angle();
 
-    cube.rotation.z = angle;
+    terrainMesh.rotation.z = angle;
 
-    cubeColliders.add(cube);
+    terrainMeshGroup.add(terrainMesh);
 }
 
 function createStars() {
