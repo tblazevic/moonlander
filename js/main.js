@@ -92,8 +92,8 @@ function createBorders() {
     let borders = new THREE.Group();
     scene.add(borders);
 
-    const verticalGeometry = new THREE.PlaneGeometry(lineWidth, gameHeight);
-    const horizontalGeometry = new THREE.PlaneGeometry(gameWidth, lineWidth);
+    const verticalGeometry = new THREE.PlaneGeometry(lineWidth, gameHeight + lineWidth*2);
+    const horizontalGeometry = new THREE.PlaneGeometry(gameWidth + lineWidth*2, lineWidth);
     const material = new THREE.MeshBasicMaterial({color: 0xffffff});
     let leftBorder = new THREE.Mesh(verticalGeometry, material);
     let rightBorder = new THREE.Mesh(verticalGeometry, material);
