@@ -27,7 +27,7 @@ The game is written in JavaScript and runs entirely on the client side.
 ## The lander, terrain and camera
 
 The lander itself is a quad with a texture.
-Using thrusters does not change velocity or acceleration, but [jerk](https://en.wikipedia.org/wiki/Jerk_(physics)), in order to have smoother landings.
+Using thrusters does not directly change velocity or acceleration, but [jerk](https://en.wikipedia.org/wiki/Jerk_(physics)), in order to have smoother landings.
 Horizontal speed is slightly decreasing to enable strategic decisions regarding fuel consumption.
 Vertical speed is only affected by gravity.
 
@@ -79,5 +79,5 @@ There are 4 sounds in the game:
 
 * `crash.mp3` - played on crash
 * `morse.mp3` - randomly played every x seconds
-* `alarm,mp3` - played every x seconds once the next crash means game over
+* `alarm.mp3` - played every x seconds once the next crash means game over
 * `rocket.mp3` - looped while using thrusters
