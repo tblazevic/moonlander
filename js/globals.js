@@ -15,6 +15,8 @@ let isZoomed = false;
 
 let velocityX = 0;
 let velocityY = 0;
+let velocityDeltaY = 0;
+let velocityDeltaX = 0;
 let currentAcceleration = 0;
 let currentAccelerationRatio = 0;
 let altitude = 0;

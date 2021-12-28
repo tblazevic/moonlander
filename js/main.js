@@ -199,8 +199,81 @@ function animate() {
 }
 
 function render() {
+    let trajectory;
+    if (isDebugOn) {
+        trajectory = generateTrajectoryMesh(calculateTrajectory());
+        scene.add(trajectory)
+    }
+
     renderer.render(scene, camera);
     renderHud();
+
+    if (isDebugOn) {
+        scene.remove(trajectory);
+    }
+}
+
+function calculateTrajectory() {
+    let x0 = lander.position.x;
+    let y0 = lander.position.y;
+    let tAy = velocityDeltaY;
+    let tAx = velocityDeltaX;
+    let tVy = velocityY;
+    let tVx = velocityX;
+    const dt = deltaTime;
+
+    let res = [[x0,y0]];
+
+    while (y0 > -halfHeight) {
+        tAx = -tVx * horizontalDragCoef * dt;
+        tAy += -gravity * dt;
+
+        tVx += tAx * dt
+        tVy += tAy * dt;
+
+        const x1 = x0 + tVx*dt;
+        const y1 = y0 + tVy*dt;
+
+        res.push([x1,y1]);
+
+        x0 = x1;
+        y0 = y1;
+    }
+
+    return res;
+}
+
+function generateTrajectoryMesh(trajectory) {
+    const lineMeshes = new THREE.Group();
+
+    const material = new THREE.MeshBasicMaterial({color: 0xffffff});
+    const geometry = new THREE.PlaneGeometry(1, 1);
+
+    for (let i = 0; i < trajectory.length-1; i++) {
+        const point0 = trajectory[i];
+        const point1 = trajectory[i+1];
+
+        const deltaX = point1[0]-point0[0];
+        const deltaY = point1[1]-point0[1];
+
+        const middle = [(point0[0] + point1[0])/2, (point0[1] + point1[1])/2];
+        const scale = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        const angle = Math.atan2(deltaY, deltaX);
+
+        const lineMesh = new THREE.Mesh(geometry, material);
+
+        lineMesh.scale.x = scale;
+        lineMesh.scale.y = lineWidth;
+
+        lineMesh.position.x = middle[0];
+        lineMesh.position.y = middle[1];
+
+        lineMesh.rotation.z = angle;
+
+        lineMeshes.add(lineMesh);
+    }
+    
+    return lineMeshes;
 }
 
 function update() {
@@ -236,8 +309,8 @@ function handleMovement() {
     if(lander.rotation.z > Math.PI / 2) lander.rotation.z = Math.PI / 2;
     if(lander.rotation.z < -Math.PI / 2) lander.rotation.z = -Math.PI / 2;
 
-    let velocityDeltaY = 0;
-    let velocityDeltaX = 0;
+    velocityDeltaY = 0;
+    velocityDeltaX = 0;
 
     velocityDeltaY += -gravity * deltaTime;
 
