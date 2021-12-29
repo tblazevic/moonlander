@@ -220,7 +220,7 @@ function calculateTrajectory() {
     let tAx = velocityDeltaX;
     let tVy = velocityY;
     let tVx = velocityX;
-    const dt = deltaTime;
+    const dt = 1.0/60;
 
     let res = [[x0,y0]];
 
