@@ -216,8 +216,8 @@ function render() {
 function calculateTrajectory() {
     let x0 = lander.position.x;
     let y0 = lander.position.y;
-    let tAy = velocityDeltaY;
-    let tAx = velocityDeltaX;
+    let tAy = 0;
+    let tAx = 0;
     let tVy = velocityY;
     let tVx = velocityX;
     const dt = 1.0/60;
@@ -333,14 +333,17 @@ function handleMovement() {
         if(currentAcceleration < 0) currentAcceleration = 0;
     }
 
-    let forward = new THREE.Vector2(0,1);
-    forward.rotateAround(new THREE.Vector2(0,0), lander.rotation.z);
-    landerBackDirection = forward.clone().negate();
+    landerForward.x = 0;
+    landerForward.y = 1;
+
+    landerForward.rotateAround(vector2Zero, lander.rotation.z);
+    landerBackDirection.x = -landerForward.x;
+    landerBackDirection.y = -landerForward.y;
 
     velocityDeltaX += -velocityX * horizontalDragCoef * deltaTime;
 
-    velocityDeltaX += forward.x * currentAcceleration * deltaTime;
-    velocityDeltaY += forward.y * currentAcceleration * deltaTime;
+    velocityDeltaX += landerForward.x * currentAcceleration * deltaTime;
+    velocityDeltaY += landerForward.y * currentAcceleration * deltaTime;
 
     velocityY += velocityDeltaY;
     velocityX += velocityDeltaX;

@@ -20,6 +20,8 @@ let velocityDeltaX = 0;
 let currentAcceleration = 0;
 let currentAccelerationRatio = 0;
 let altitude = 0;
+let landerForward = new THREE.Vector2(0,1);
+const vector2Zero = new THREE.Vector2(0,0);
 
 let rotatingLeft = false;
 let rotatingRight = false;
@@ -48,7 +50,7 @@ let scoreMultipliers = [];
 
 let thrusterParticleEmitPoint;
 let thrusterPS, explosionPS;
-let landerBackDirection;
+let landerBackDirection = new THREE.Vector2(0,-1);
 
 let fuelChange, scoreChange;
 let crashInfo;
