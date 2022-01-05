@@ -216,31 +216,33 @@ function render() {
 function calculateTrajectory() {
     let x0 = lander.position.x;
     let y0 = lander.position.y;
-    let tAx = 0;
-    let tAy = 0;
-    let tVx = velocityX;
+    let tAy = velocityDeltaY;
+    let tAx = velocityDeltaX;
     let tVy = velocityY;
-    const dt = 1.0/60;
+    let tVx = velocityX;
+    const dt = deltaTime; //1.0/60;
 
-    let res = [[x0,y0]];
+    let res = [[x0,y0]]; // First point of trajectory is lander position
+		let trajectoryVelocity = [{"Vx" : velocityY , "Vy" : velocityY}]; // Store velocity at trajectory point, to show circles of different sizes in debug mode (to be implemented)
 
-    while (y0 > -halfHeight) {
-        tAx = -tVx * horizontalDragCoef * dt;
-        tAy += -gravity * dt * 0.5;
+    while (y0 > -halfHeight) { // trajectory calculated down to ground (y0=0 at center of screen)
+        tAx = 0; //-tVx * horizontalDragCoef *  dt;  // Horizontal acceleration is null when engine is off (no air drag)
+        tAy = -gravity; // Vertical acceleration is constant and equal to gravity
 
-        tVx += tAx * dt;
+        tVx += tAx * dt
         tVy += tAy * dt;
 
         const x1 = x0 + tVx*dt;
         const y1 = y0 + tVy*dt;
 
         res.push([x1,y1]);
+				trajectoryVelocity.push({"Vx" : tVx , "Vy" : tVy}); // Store velocity at trajectory point, to show circles of different sizes in debug mode (to be implemented)
 
         x0 = x1;
         y0 = y1;
     }
 
-    return res;
+    return { "points": res, "speeds": trajectoryVelocity};
 }
 
 function generateTrajectoryMesh(trajectory) {
@@ -249,9 +251,9 @@ function generateTrajectoryMesh(trajectory) {
     const material = new THREE.MeshBasicMaterial({color: 0xffffff});
     const geometry = new THREE.PlaneGeometry(1, 1);
 
-    for (let i = 0; i < trajectory.length-1; i++) {
-        const point0 = trajectory[i];
-        const point1 = trajectory[i+1];
+    for (let i = 0; i < trajectory.points.length-1; i++) {
+        const point0 = trajectory.points[i];
+        const point1 = trajectory.points[i+1];
 
         const deltaX = point1[0]-point0[0];
         const deltaY = point1[1]-point0[1];
@@ -333,17 +335,14 @@ function handleMovement() {
         if(currentAcceleration < 0) currentAcceleration = 0;
     }
 
-    landerForward.x = 0;
-    landerForward.y = 1;
+    let forward = new THREE.Vector2(0,1);
+    forward.rotateAround(new THREE.Vector2(0,0), lander.rotation.z);
+    landerBackDirection = forward.clone().negate();
 
-    landerForward.rotateAround(vector2Zero, lander.rotation.z);
-    landerBackDirection.x = -landerForward.x;
-    landerBackDirection.y = -landerForward.y;
+    // velocityDeltaX += -velocityX *  horizontalDragCoef *   deltaTime;
 
-    velocityDeltaX += -velocityX * horizontalDragCoef * deltaTime;
-
-    velocityDeltaX += landerForward.x * currentAcceleration * deltaTime;
-    velocityDeltaY += landerForward.y * currentAcceleration * deltaTime;
+    velocityDeltaX += forward.x * currentAcceleration * deltaTime;
+    velocityDeltaY += forward.y * currentAcceleration * deltaTime;
 
     velocityY += velocityDeltaY;
     velocityX += velocityDeltaX;
@@ -379,7 +378,7 @@ function terrainCheck() {
             let leftVector = lineSegments[j][0];
             let rightVector = lineSegments[j][1];
 
-            if(i == 0 && worldPosition.x > leftVector.x && worldPosition.x < rightVector.x){
+            if((i == 0) && (leftVector.x < worldPosition.x) && (worldPosition.x < rightVector.x)){
                 const k = (rightVector.y-leftVector.y)/(rightVector.x-leftVector.x);
                 const terrainHeight = leftVector.y + k * (worldPosition.x - leftVector.x);
                 altitude = worldPosition.y - mainScale - smallScale - terrainHeight;
