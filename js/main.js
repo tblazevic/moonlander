@@ -217,7 +217,7 @@ function calculateTrajectory() {
     let x0 = lander.position.x;
     let y0 = lander.position.y;
     let tAx = 0;
-    let tAy = 0;
+    let tAy = -gravity;
     let tVx = velocityX;
     let tVy = velocityY;
     const dt = 1.0/60;
@@ -225,8 +225,7 @@ function calculateTrajectory() {
     let res = [[x0,y0]];
 
     while (y0 > -halfHeight) {
-        tAx = -tVx * horizontalDragCoef * dt;
-        tAy += -gravity * dt * 0.5;
+        tAx = -tVx * horizontalDragCoef;
 
         tVx += tAx * dt;
         tVy += tAy * dt;
