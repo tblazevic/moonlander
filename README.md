@@ -81,3 +81,9 @@ There are 4 sounds in the game:
 * `morse.mp3` - randomly played every x seconds
 * `alarm.mp3` - played every x seconds once the next crash means game over
 * `rocket.mp3` - looped while using thrusters
+
+## Level map
+
+The level is a series of connected line segments.
+Checking collisions against a single segment is simple.
+The background stars are randomly put above the segments.
