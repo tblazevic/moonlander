@@ -24,7 +24,7 @@ The game is written in JavaScript and runs entirely on the client side.
 * `particles.js` - particle systems
 * `main.js` - main game functionality
 
-## The lander, terrain and camera
+## The lander and camera
 
 The lander itself is a quad with a texture.
 Using thrusters does not directly change velocity or acceleration, but [jerk](https://en.wikipedia.org/wiki/Jerk_(physics)), in order to have smoother landings.
@@ -32,9 +32,6 @@ Horizontal speed is slightly decreasing to enable strategic decisions regarding 
 Vertical speed is only affected by gravity.
 
 The lander is spawned randomly, with a random horizontal speed forcing the player to use some more fuel before attempting to land.
-
-The terrain is defined through an array of points.
-Between each pair of points, a quad is positioned, rotated and scaled to connect the two points.
 
 Once the altitude drops below a certain threshold, the camera zooms in and follows the center point between the lander and terrain directly below.
 It makes the game less static and helps with landing.
@@ -82,8 +79,10 @@ There are 4 sounds in the game:
 * `alarm.mp3` - played every x seconds once the next crash means game over
 * `rocket.mp3` - looped while using thrusters
 
-## Level map
+## Level terrain
 
 The level is a series of connected line segments.
 Checking collisions against a single segment is simple.
 The background stars are randomly put above the segments.
+
+Between each pair of points, a quad is positioned, rotated and scaled to connect the two points graphically.
