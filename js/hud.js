@@ -46,7 +46,7 @@ function fillLeftInfoPanel() {
         hudWidth*infoPanelRelativeOffsetX, 
         hudHeight*(infoPanelRelativeOffsetY+0*infoPanelRelativeOffsetYStep));
     hudContext.fillText(
-        "TIME".padEnd(7, " ") + (currentTime/59 | 0).toString().padStart(1, "0")+":"+(currentTime%59).toFixed(0).padStart(2, "0"), 
+        "TIME".padEnd(7, " ") + (currentTime/60 | 0).toString().padStart(1, "0")+":"+(currentTime%60).toFixed(0).padStart(2, "0"), 
         hudWidth*infoPanelRelativeOffsetX, 
         hudHeight*(infoPanelRelativeOffsetY+1*infoPanelRelativeOffsetYStep));
     hudContext.fillText(
