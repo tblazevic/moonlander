@@ -65,6 +65,10 @@ Bonus markings are rendered in world space.
 One particle system is attached to the thruster and it emits particles in a cone.  
 The other one creates a circular explosion when the player crashes.
 
+Both extend `ParticleSystem`, which preallocates a fixed pool of particles and handles their lifetime, movement and appearance.
+Expired particles return to the pool for reuse, and only active particles are updated. Emission reuses temporary vectors as well.
+The thruster drops excess emissions when its pool is full and a new explosion restarts its existing pool.
+
 ![thruster](./images/thruster.png "thruster")
 
 ![explosion](./images/explosion.png "explosion")
